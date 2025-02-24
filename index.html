@@ -62,14 +62,22 @@
   </div>
 
   <script>
-    // Generate the 12-sector color ring (empty center)
+    // Helper: random hex color generator
+    function getRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    // Generate the 12-sector color ring (empty center) with random starting colors
     const svg = document.getElementById('colorWheelSvg');
     const numSectors = 12;
     const outerR = 70;
-    const innerR = 42; // maintains the 50:30 ratio (i.e. 70:42)
+    const innerR = 42; // maintains the 70:42 ratio
     const center = { x: 70, y: 70 };
-    const colors = ["#FF0000","#FF7F00","#FFFF00","#00FF00","#00FFFF","#0000FF",
-                    "#8B00FF","#FF00FF","#FFC0CB","#A52A2A","#808080","#FFD700"];
 
     function polarToCartesian(cx, cy, radius, angle) {
       const rad = angle * Math.PI / 180;
@@ -95,7 +103,7 @@
       const endAngle = (i + 1) * (360 / numSectors);
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
       path.setAttribute("d", describeSector(center.x, center.y, outerR, innerR, startAngle, endAngle));
-      path.setAttribute("fill", colors[i]);
+      path.setAttribute("fill", getRandomColor());
       path.setAttribute("class", "sector");
       path.setAttribute("id", "sector" + i);
       svg.appendChild(path);
@@ -125,15 +133,6 @@
     });
 
     // Random color assignment for each letter in the title
-    function getRandomColor() {
-      const letters = '0123456789ABCDEF';
-      let color = '#';
-      for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    }
-
     window.addEventListener('load', function() {
       const textPath = document.getElementById('titleTextPath');
       const text = textPath.textContent;
